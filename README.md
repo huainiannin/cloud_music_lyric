@@ -1,0 +1,2 @@
+# cloud_music_lyric
+根据网易云音乐专辑id获取专辑下所有的歌词
