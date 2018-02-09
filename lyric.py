@@ -43,8 +43,11 @@ for i in songIdList:
 
   for i in range(len(templyric)):
       lyricList.append(templyric[i])
-      if temptlyric[i]:
+      if temptlyric:
           lyricList.append(temptlyric[i])
+
+  templyric = None
+  temptlyric = None
 
 #save file
 file = open(album,"w+")
