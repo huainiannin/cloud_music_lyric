@@ -50,7 +50,7 @@ for i in songIdList:
   temptlyric = None
 
 #save file
-file = open(album,"w+")
+file = open('mobi/{0}'.format(album),"w+")
 for i in lyricList:
 	file.write(i)
 
