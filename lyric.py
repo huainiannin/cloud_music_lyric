@@ -35,15 +35,16 @@ for i in songIdList:
 		lyric = re.sub('\[.*\]','',lyricDict.get('lrc').get('lyric'))
 		lyricList.append(i.get('name'))
 		lyricList.append("\n")
-		lyricList.append(lyric)
-		lyricList.append("\n")
+    templyric = lyric.split('\n')
 	#get trans
 	if(lyricDict.get('tlyric') and lyricDict.get('tlyric').get('lyric')):
 		lyric = re.sub('\[.*\]','',lyricDict.get('tlyric').get('lyric'))
-		lyricList.append(i.get('name'))
-		lyricList.append("\n")
-		lyricList.append(lyric)
-		lyricList.append("\n")
+    temptlyric = lyric.split('\n')
+
+  for i in range(len(templyric)):
+      lyricList.append(templyric[i])
+      if temptlyric[i]:
+          lyricList.append(temptlyric[i])
 
 #save file
 file = open(album,"w+")
