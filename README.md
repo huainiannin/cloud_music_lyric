@@ -7,5 +7,6 @@
 --------
 python lyric.py id
 
-# ebook meta 命令参考网址
-(http://www.sohu.com/a/216337654_650589)
+ebook meta 命令参考网址
+----------------------
+http://www.sohu.com/a/216337654_650589
