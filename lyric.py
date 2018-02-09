@@ -15,6 +15,8 @@ songList = jsonObject.get('songs')
 songIdList = []
 album = jsonObject.get('album').get('name')
 album = album.replace("/","")
+#汉字转拼音
+album = '_'.join(lazy_pinyin(album))
 print("album name is {0}".format(album))
 
 #get song info to another list
