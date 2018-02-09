@@ -6,3 +6,6 @@
 使用方法
 --------
 python lyric.py id
+
+# ebook meta 命令参考网址
+(http://www.sohu.com/a/216337654_650589)
