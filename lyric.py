@@ -16,6 +16,7 @@ songIdList = []
 album = jsonObject.get('album').get('name')
 album = album.replace("/","")
 #汉字转拼音
+from pypinyin import lazy_pinyin
 album = '_'.join(lazy_pinyin(album))
 print("album name is {0}".format(album))
 
@@ -27,32 +28,39 @@ for i in songList:
 #get lyrics
 print("lyric ids are{0}".format(songIdList))
 lyricList = []
+templyric = []
+temptlyric = []
 import re
+#循环歌曲
 for i in songIdList:
 	lyricJson = urlopen("http://localhost:3000/lyric?id={0}".format(i.get('id')))
 	lyricDict = json.loads(lyricJson.read().decode("utf-8"))
 	if(lyricDict.get('lrc') and lyricDict.get('lrc').get('lyric')):
-		lyric = re.sub('\[.*\]','',lyricDict.get('lrc').get('lyric'))
+		lyric = lyricDict.get('lrc').get('lyric')
 		lyricList.append(i.get('name'))
 		lyricList.append("\n")
-    templyric = lyric.split('\n')
-	#get trans
+		lyricList.append("\n")
+		templyric = lyric.split('\n')
 	if(lyricDict.get('tlyric') and lyricDict.get('tlyric').get('lyric')):
-		lyric = re.sub('\[.*\]','',lyricDict.get('tlyric').get('lyric'))
-    temptlyric = lyric.split('\n')
+		lyric = lyricDict.get('tlyric').get('lyric')
+		temptlyric = lyric.split('\n')
 
-  for i in range(len(templyric)):
-      lyricList.append(templyric[i])
-      if temptlyric:
-          lyricList.append(temptlyric[i])
+	for j in range(len(templyric)):
+		lyricList.append(templyric[j])
+		lyricList.append('\n')
+		if(len(templyric[j])>0 and templyric[j][0]=='['):
+			flag = templyric[j][0:templyric[j].index(']')+1]
+			for k in range(len(temptlyric)):
+				if(len(temptlyric[k])>0 and temptlyric[k][0:temptlyric[k].index(']')+1] == flag):	
+					lyricList.append(temptlyric[k])		
+					lyricList.append('\n')
 
-  templyric = None
-  temptlyric = None
-
+	templyric = []
+	temptlyric = []
 #save file
 file = open('mobi/{0}'.format(album),"w+")
 for i in lyricList:
-	file.write(i)
+	file.write(re.sub('\[.*\]','',i))
 
 file.close()
 
@@ -70,7 +78,7 @@ message['from'] = '15206651142@163.com'
 message['to'] = '15206651142@kindle.cn'
 message['Subject'] = Header(subject,'utf-8')
 
-att = MIMEText(open(album,'rb').read(),'base64','utf-8')
+att = MIMEText(open('mobi/{0}'.format(album),'rb').read(),'base64','utf-8')
 att["Content-Type"] = 'application/octet-stream'
 
 att["Content-Disposition"]= 'attachment; filename={0}.txt'.format(album)
@@ -78,7 +86,7 @@ message.attach(att)
 
 smtp = smtplib.SMTP()    
 smtp.connect('smtp.163.com')    
-smtp.login('15206651142@163.com', '***')  
+smtp.login('15206651142@163.com', 'huainiannin322')  
 smtp.sendmail(sender,receiver,message.as_string())
 
 smtp.quit()
