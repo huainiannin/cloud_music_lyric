@@ -1,5 +1,6 @@
 #!usr/bin/python
 #-*- conding:utf-8 -*-
+host = 'http://musicapi.leanapp.cn/'
 import sys
 
 #get album id
