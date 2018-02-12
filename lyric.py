@@ -1,23 +1,31 @@
 #!usr/bin/python
 #-*- conding:utf-8 -*-
 host = 'http://musicapi.leanapp.cn/'
+#parse json
+import json
+import re
+#send email
+import smtplib
 import sys
+from urllib.request import urlopen
+
+#汉字转拼音
+from pypinyin import lazy_pinyin
+
+from email.header import Header
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 
 #get album id
 id = sys.argv[1]
 
-from urllib.request import urlopen
 jsonContent = urlopen("http://localhost:3000/album?id={0}".format(id))
 
-#parse json
-import json
 jsonObject = json.loads(jsonContent.read().decode('utf-8'))
 songList = jsonObject.get('songs')
 songIdList = []
 album = jsonObject.get('album').get('name')
 album = album.replace("/","")
-#汉字转拼音
-from pypinyin import lazy_pinyin
 album = '_'.join(lazy_pinyin(album))
 print("album name is {0}".format(album))
 
@@ -31,7 +39,6 @@ print("lyric ids are{0}".format(songIdList))
 lyricList = []
 templyric = []
 temptlyric = []
-import re
 #循环歌曲
 for i in songIdList:
 	lyricJson = urlopen("http://localhost:3000/lyric?id={0}".format(i.get('id')))
@@ -65,11 +72,6 @@ for i in lyricList:
 
 file.close()
 
-#send email
-import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
-from email.header import Header
 sender = "15206651142@163.com"
 receiver = '15206651142@kindle.cn'
 
@@ -91,5 +93,3 @@ smtp.login('15206651142@163.com', 'huainiannin322')
 smtp.sendmail(sender,receiver,message.as_string())
 
 smtp.quit()
-
-
